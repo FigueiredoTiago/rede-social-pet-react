@@ -1,21 +1,21 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import useFetch from ".././Hooks/useFetch";
-import { PHOTO_GET } from ".././Hooks/Api";
 import Error from "../Helper/Error";
 import Loading from "../Helper/Loading";
-import PhotoContent from "./PhotoContent";
+import PhotoContent from "./PhotoContent";  
 import Head from "./../Helper/Head";
+
+import { useSelector, useDispatch } from "react-redux";
+import { fetchPhoto } from "../../store/reducers/photo";
 
 const Photo = () => {
   const { id } = useParams();
-  const { data, loading, error, request } = useFetch();
+  const {loading, error, data} = useSelector((state) => state.photo);
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
-    const { url, options } = PHOTO_GET(id);
-    request(url, options);
-    console.log(data);
-  }, [request, id]);
+    dispatch(fetchPhoto(id));
+  }, [fetchPhoto, id]);
 
   if (error) return <Error error={error} />;
   if (loading) return <Loading />;
@@ -23,7 +23,7 @@ const Photo = () => {
     return (
       <section className="container mainContainer">
         <Head title={data.photo.title} />
-        <PhotoContent single={true} data={data} />
+        <PhotoContent single={true} />
       </section>
     );
   else return null;
