@@ -5,13 +5,16 @@ import LoginCreate from './LoginCreate'
 import LoginForm from './LoginForm'
 import LoginPasswordLost from './LoginPasswordLost';
 import LoginPasswordReset from './LoginForm'
-import { UserContext } from '../Hooks/UserContext'
 import NotFound from '../NotFound/NotFound';
 import Head from "./../Helper/Head";
 
+import { useSelector } from 'react-redux';
+
 function Login() {
-  const { login } = React.useContext(UserContext);
-  if(login === true) {
+
+  const { data } = useSelector(state => state.user);
+
+  if( data ) {
     return <Navigate to='/conta' />
   }
   return (

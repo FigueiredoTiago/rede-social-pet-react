@@ -1,19 +1,19 @@
-import React from 'react'
-import { Route, Routes } from 'react-router-dom';
-import Feed from '../Feed/Feed';
-import { UserContext } from "../Hooks/UserContext";
-import NotFound from '../NotFound/NotFound';
-import UserHeader from './UserHeader';
-import UserPhotoPost from './UserPhotoPost';
-import UserStats from './UserStats';
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import Feed from "../Feed/Feed";
+import NotFound from "../NotFound/NotFound";
+import UserHeader from "./UserHeader";
+import UserPhotoPost from "./UserPhotoPost";
+import UserStats from "./UserStats";
 import Head from "./../Helper/Head";
+import { useSelector } from "react-redux";
 
 const User = () => {
-  const { data } = React.useContext(UserContext);
+  const { data } = useSelector((state) => state.user);
 
   return (
     <section className="container">
-      <Head title='Minha conta' />
+      <Head title="Minha conta" />
       <UserHeader />
       <Routes>
         <Route path="/" element={<Feed user={data.id} />} />
@@ -23,6 +23,6 @@ const User = () => {
       </Routes>
     </section>
   );
-}
+};
 
-export default User
+export default User;
