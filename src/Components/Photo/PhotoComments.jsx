@@ -1,12 +1,14 @@
 import React, { useContext } from 'react'
-import {UserContext} from '../Hooks/UserContext';
 import PhotoCommentsForm from './PhotoCommentsForm';
 
 import styles from './PhotoComment.module.css';
 
+import { useSelector } from 'react-redux';
+
 const PhotoComments = (props) => {
   const [comments, setComments] = React.useState(() => props.comments);
-  const { login } = React.useContext(UserContext);
+  
+  const { data } = useSelector(state => state.user);
 
   return (
     <>
@@ -18,7 +20,7 @@ const PhotoComments = (props) => {
           </li>
         ))}
       </ul>
-      {login && <PhotoCommentsForm single={props.single} id={props.id} setComments={setComments} />}
+      {data && <PhotoCommentsForm single={props.single} id={props.id} setComments={setComments} />}
     </>
   );
 };   

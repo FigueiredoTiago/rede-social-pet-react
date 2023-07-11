@@ -9,11 +9,12 @@ import NotFound from '../NotFound/NotFound';
 import Head from "./../Helper/Head";
 
 import { useSelector } from 'react-redux';
+import Loading from '../Helper/Loading';
 
 function Login() {
 
-  const { data } = useSelector(state => state.user);
-
+  const { data, loading } = useSelector(state => state.user);
+  if( loading ) return <Loading />;
   if( data ) {
     return <Navigate to='/conta' />
   }

@@ -1,21 +1,25 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useForm } from "react-hook-form";
 import Button from '../Forms/Button';
 import Input from '../Forms/Input';
 import { USER_POST } from '../Hooks/Api';
 import useFetch from '../Hooks/useFetch';
-import { UserContext } from '../Hooks/UserContext';
 import Error from '../Helper/Error';
 import Head from "./../Helper/Head";
 
+import { useDispatch } from 'react-redux';
+import { userLogin } from '../../store/reducers/user';
+
 const LoginCreate = () => {
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const {userLogin} = useContext(UserContext);
+  
   const {loading, error, request} = useFetch();
 
   async function onSubmit(data) {
@@ -30,7 +34,7 @@ const LoginCreate = () => {
     });
 
     const {response} = await request(url, options);
-    if(response.ok) userLogin(username, password);
+    if(response.ok) dispatch(userLogin({username: username, password: password}));
     
     console.log(response);
   }
