@@ -1,20 +1,29 @@
 import React from "react";
 import FeedModal from "./FeedModal";
 import FeedPhotos from "./FeedPhotos";
+import Loading from "../Helper/Loading";
+
+import { useSelector, useDispatch } from "react-redux";
+import { loadNewPhotos, resetFeedState } from "../../store/reducers/feed";
 
 const Feed = ({ user }) => {
   const [modalPhoto, setModalPhoto] = React.useState(null);
-  const [pages, setPages] = React.useState([1]);
-  const [infinity, setInfinity] = React.useState(true);
+  const { infinite, loading, list, error } = useSelector((state) => state.feed);
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(resetFeedState());
+    dispatch(loadNewPhotos({ user, total: 6 }));
+  }, [dispatch, user]);
 
   React.useEffect(() => {
     let wait = false;
     function infiniteScroll() {
-      if (infinity) {
+      if (infinite) {
         const scroll = window.scrollY;
         const height = document.body.offsetHeight - window.innerHeight;
         if (scroll > height * 0.75 && !wait) {
-          setPages((pages) => [...pages, pages.length + 1]);
+          dispatch(loadNewPhotos({ user, total: 6 }));
           wait = true;
           setTimeout(() => {
             wait = false;
@@ -29,25 +38,42 @@ const Feed = ({ user }) => {
       window.removeEventListener("wheel", infiniteScroll);
       window.removeEventListener("scroll", infiniteScroll);
     };
-  }, [infinity]);
+  }, [infinite, dispatch, user]);
 
   return (
     <div>
       {modalPhoto && (
         <FeedModal photo={modalPhoto} setModalPhoto={setModalPhoto} />
       )}
+      {list.length > 0 && <FeedPhotos setModalPhoto={setModalPhoto} />}
+      {loading && <Loading />}
+      {error && <p>{error}</p> }
 
-      {pages.map((page) => (
-        <FeedPhotos
-          key={page}
-          user={user}
-          setModalPhoto={setModalPhoto}
-          page={page}
-          setInfinity={setInfinity}
-        />
-      ))}
+      {!infinite && !user && (
+        <p
+          style={{
+            textAlign: "center",
+            padding: "2rem 0 4rem 0",
+            color: "#888",
+          }}
+        >
+          Não existem mais postagens.
+        </p>
+      )}
     </div>
   );
 };
 
-export default Feed;
+Feed.defaultProps = {
+  user: 0,
+};
+
+// Feed.propTypes = {
+//   user: PropTypes.oneOfType([
+//     PropTypes.string.isRequired,
+//     PropTypes.number.isRequired,
+//   ]),
+// };
+
+export default Feed;    
+
