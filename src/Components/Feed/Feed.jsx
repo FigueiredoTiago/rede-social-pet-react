@@ -2,6 +2,7 @@ import React from "react";
 import FeedModal from "./FeedModal";
 import FeedPhotos from "./FeedPhotos";
 import Loading from "../Helper/Loading";
+import PropTypes from "prop-types";
 
 import { useSelector, useDispatch } from "react-redux";
 import { loadNewPhotos, resetFeedState } from "../../store/reducers/feed";
@@ -68,6 +69,13 @@ Feed.defaultProps = {
   user: 0,
 };
 
+Feed.propTypes = {
+  user: PropTypes.oneOfType([
+    PropTypes.string.isRequired,
+    PropTypes.number.isRequired,
+  ]),
+};
 
 export default Feed;    
 
+    
