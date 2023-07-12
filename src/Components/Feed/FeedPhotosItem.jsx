@@ -1,10 +1,20 @@
 import React from "react";
 import Image from "../Helper/image";
 import styles from "./FeedPhotosItem.module.css";
+import Loading from "../Helper/Loading";
 
-const FeedPhotosItem = ({ photo, setModalPhoto }) => {
+import { useDispatch, useSelector } from "react-redux";
+import { openModal  } from "../../store/reducers/ui";
+import { fetchPhoto } from "../../store/reducers/photo";
+
+
+const FeedPhotosItem = ({ photo }) => {
+  const dispatch = useDispatch();
+  
+
   function handleClick() {
-    setModalPhoto(photo);
+    dispatch(openModal());
+    dispatch(fetchPhoto(photo.id));
   }
 
   return (
@@ -15,4 +25,4 @@ const FeedPhotosItem = ({ photo, setModalPhoto }) => {
   );
 };
 
-export default FeedPhotosItem;
+export default FeedPhotosItem;   

@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { loadNewPhotos, resetFeedState } from "../../store/reducers/feed";
 
 const Feed = ({ user }) => {
-  const [modalPhoto, setModalPhoto] = React.useState(null);
+  
   const { infinite, loading, list, error } = useSelector((state) => state.feed);
   const dispatch = useDispatch();
 
@@ -40,12 +40,12 @@ const Feed = ({ user }) => {
     };
   }, [infinite, dispatch, user]);
 
+  
   return (
     <div>
-      {modalPhoto && (
-        <FeedModal photo={modalPhoto} setModalPhoto={setModalPhoto} />
-      )}
-      {list.length > 0 && <FeedPhotos setModalPhoto={setModalPhoto} />}
+      <FeedModal/>
+      
+      {list.length > 0 && <FeedPhotos />}
       {loading && <Loading />}
       {error && <p>{error}</p> }
 
@@ -68,12 +68,6 @@ Feed.defaultProps = {
   user: 0,
 };
 
-// Feed.propTypes = {
-//   user: PropTypes.oneOfType([
-//     PropTypes.string.isRequired,
-//     PropTypes.number.isRequired,
-//   ]),
-// };
 
 export default Feed;    
 
